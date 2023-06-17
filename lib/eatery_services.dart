@@ -11,7 +11,8 @@ class FileServices {
   }
 
   static Future<Directory> libraryPath() async {
-    Directory galleryDirectory = Directory('${(await basePath()).path}\\images');
+    Directory galleryDirectory =
+        Directory('${(await basePath()).path}\\images');
     if (!galleryDirectory.existsSync()) {
       await galleryDirectory.create(recursive: true);
     }
@@ -19,7 +20,8 @@ class FileServices {
   }
 
   static Future<Directory> archivePath() async {
-    Directory galleryDirectory = Directory('${(await basePath()).path}\\archive');
+    Directory galleryDirectory =
+        Directory('${(await basePath()).path}\\archive');
     if (!galleryDirectory.existsSync()) {
       galleryDirectory.create(recursive: true);
     }
@@ -27,18 +29,21 @@ class FileServices {
   }
 
   static Future<File?> copy(
-      {required String target, required Directory directory, bool overwrite = false}) async {
+      {required String target,
+      required Directory directory,
+      bool overwrite = false}) async {
     File? output;
-    String? fileName = File(target).existsSync() ? path.basename(File(target).path) : null;
+    String? fileName =
+        File(target).existsSync() ? path.basename(File(target).path) : null;
     if (fileName != null) {
-      if(!overwrite) {
+      if (!overwrite) {
         int index = 1;
-        while(File('${directory.path}\\$fileName').existsSync()){
+        while (File('${directory.path}\\$fileName').existsSync()) {
           List<String> temp = fileName!.split('.');
           String ext = temp.last;
           temp.removeLast(); // remove extension
           List<String> temp2 = temp.join('.').split('-');
-          if(temp2.last == '${index - 1}'){
+          if (temp2.last == '${index - 1}') {
             temp2.removeLast(); // remove index
           }
           fileName = '${temp2.join('-')}-$index.$ext';
@@ -53,21 +58,24 @@ class FileServices {
   }
 
   static Future<File?> move(
-      {required String target, required Directory directory, bool overwrite = false}) async {
+      {required String target,
+      required Directory directory,
+      bool overwrite = false}) async {
     File? output;
-    String? fileName = File(target).existsSync() ? path.basename(File(target).path) : null;
+    String? fileName =
+        File(target).existsSync() ? path.basename(File(target).path) : null;
     if (fileName != null) {
-      if(!overwrite) {
+      if (!overwrite) {
         int index = 1;
-        while(File('${directory.path}\\$fileName').existsSync()){
+        while (File('${directory.path}\\$fileName').existsSync()) {
           List<String> temp = fileName!.split('.');
           String ext = temp.last;
           temp.removeLast(); // remove extension
           List<String> temp2 = temp.join('.').split('-');
-          if(temp2.last == '${index - 1}'){
+          if (temp2.last == '${index - 1}') {
             temp2.removeLast(); // remove index
           }
-          fileName = temp2.join('-') + '-$index.$ext';
+          fileName = '${temp2.join('-')}-$index.$ext';
           index++;
         }
       }
@@ -78,16 +86,18 @@ class FileServices {
     }
     return output;
   }
+
   static Future delete(String target) async {
     await (File(target)).delete();
   }
-  
+
   static Future<List<String>> getImages() async {
     List<String> files = [];
     Directory directory = await libraryPath();
-    List<FileSystemEntity> kfiles =  directory.listSync();
-    kfiles.sort((a, b) => a.statSync().accessed.compareTo(a.statSync().accessed)); // recheck
-    for(FileSystemEntity file in kfiles){
+    List<FileSystemEntity> kfiles = directory.listSync();
+    kfiles.sort((a, b) =>
+        a.statSync().accessed.compareTo(a.statSync().accessed)); // recheck
+    for (FileSystemEntity file in kfiles) {
       files.add(file.path);
     }
     return files;
